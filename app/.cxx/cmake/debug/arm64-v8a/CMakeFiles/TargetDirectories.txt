@@ -1,0 +1,3 @@
+/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/.cxx/cmake/debug/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/.cxx/cmake/debug/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/.cxx/cmake/debug/arm64-v8a/CMakeFiles/Native.dir

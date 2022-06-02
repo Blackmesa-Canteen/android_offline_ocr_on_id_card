@@ -1,0 +1,27 @@
+{
+  "buildFiles": [
+    "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/src/main/cpp/CMakeLists.txt",
+    "/Users/shaotienlee/Library/Android/sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake",
+    "/Users/shaotienlee/Library/Android/sdk/ndk/21.1.6352462/build/cmake/platforms.cmake",
+    "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/OpenCV/sdk/native/jni/OpenCVConfig-version.cmake",
+    "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/OpenCV/sdk/native/jni/OpenCVConfig.cmake",
+    "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/OpenCV/sdk/native/jni/abi-arm64-v8a/OpenCVConfig.cmake",
+    "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/OpenCV/sdk/native/jni/abi-arm64-v8a/OpenCVModules.cmake",
+    "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/OpenCV/sdk/native/jni/abi-arm64-v8a/OpenCVModules-release.cmake"
+  ],
+  "cleanCommands": [
+    "/Users/shaotienlee/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/.cxx/cmake/debug/arm64-v8a\" clean"
+  ],
+  "buildTargetsCommand": "/Users/shaotienlee/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/.cxx/cmake/debug/arm64-v8a\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "Native-Debug-arm64-v8a": {
+      "artifactName": "Native",
+      "buildCommand": "/Users/shaotienlee/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/.cxx/cmake/debug/arm64-v8a\" Native",
+      "abi": "arm64-v8a",
+      "output": "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/build/intermediates/cmake/debug/obj/arm64-v8a/libNative.so",
+      "runtimeFiles": [
+        "/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/PaddleLite/cxx/libs/arm64-v8a/libpaddle_light_api_shared.so"
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# ninja log v5
+2	1719	1654165113	CMakeFiles/Native.dir/utils.cc.o	578aa58295d03877
+1	2298	1654165114	CMakeFiles/Native.dir/Native.cc.o	8a91a152cc5daa39
+2	2423	1654165114	CMakeFiles/Native.dir/cls_process.cc.o	8f8dc42e683a05a
+3	2428	1654165114	CMakeFiles/Native.dir/rec_process.cc.o	87a5b074f0f31f5e
+4	2714	1654165114	CMakeFiles/Native.dir/clipper.cpp.o	69682df67704eb98
+3	2783	1654165114	CMakeFiles/Native.dir/det_process.cc.o	fd2cca6d884b5e6
+3	2838	1654165114	CMakeFiles/Native.dir/db_post_process.cc.o	d657db2c78d64a5f
+2	3062	1654165114	CMakeFiles/Native.dir/pipeline.cc.o	e40552ce90afee89
+3062	4856	1654165116	/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/build/intermediates/cmake/debug/obj/arm64-v8a/libNative.so	7cfd30bf9fed0a1f
