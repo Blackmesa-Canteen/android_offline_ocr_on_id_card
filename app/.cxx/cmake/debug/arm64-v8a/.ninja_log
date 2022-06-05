@@ -8,3 +8,11 @@
 3	2838	1654165114	CMakeFiles/Native.dir/db_post_process.cc.o	d657db2c78d64a5f
 2	3062	1654165114	CMakeFiles/Native.dir/pipeline.cc.o	e40552ce90afee89
 3062	4856	1654165116	/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/build/intermediates/cmake/debug/obj/arm64-v8a/libNative.so	7cfd30bf9fed0a1f
+8	1838	1654440344	CMakeFiles/Native.dir/Native.cc.o	8a91a152cc5daa39
+9	2482	1654440344	CMakeFiles/Native.dir/pipeline.cc.o	e40552ce90afee89
+6	4925	1654441597	CMakeFiles/Native.dir/Native.cc.o	8a91a152cc5daa39
+10	6303	1654441598	CMakeFiles/Native.dir/pipeline.cc.o	e40552ce90afee89
+3	1149	1654441615	CMakeFiles/Native.dir/process_result.cpp.o	e2816a89e17d8c77
+1150	4053	1654441618	/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/build/intermediates/cmake/debug/obj/arm64-v8a/libNative.so	32f09a2e53fa2745
+3	1778	1654441992	CMakeFiles/Native.dir/Native.cc.o	8a91a152cc5daa39
+1778	3856	1654441994	/Users/shaotienlee/Code/open_source/paddle-related/ppocr_demo/app/build/intermediates/cmake/debug/obj/arm64-v8a/libNative.so	32f09a2e53fa2745

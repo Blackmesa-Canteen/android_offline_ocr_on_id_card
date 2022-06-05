@@ -47,6 +47,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
     protected int cpuThreadNum = 1;
     protected String cpuPowerMode = "LITE_POWER_HIGH";
 
+    // result text array of OCR
+    private String[] resTextArray;
+    private float[] resTextTrustArray;
+
 
     Native predictor = new Native();
 
@@ -93,7 +97,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
             savedImagePath = MainActivity.this.savedImagePath;
         }
         savedImagePath = Utils.getDCIMDirectory() + File.separator + "result.jpg";
-        boolean modified = predictor.process(inTextureId, outTextureId, textureWidth, textureHeight, savedImagePath);
+        boolean modified = predictor.process(
+                inTextureId,
+                outTextureId,
+                textureWidth,
+                textureHeight,
+                savedImagePath);
         if (!savedImagePath.isEmpty()) {
             synchronized (this) {
                 MainActivity.this.savedImagePath = "";
@@ -103,6 +112,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
         if (lastFrameIndex >= 30) {
             final int fps = (int) (lastFrameIndex * 1e9 / (System.nanoTime() - lastFrameTime));
             runOnUiThread(new Runnable() {
+                @Override
                 public void run() {
                     tvStatus.setText(Integer.toString(fps) + "fps");
                 }
@@ -150,7 +160,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
     }
 
     public void checkRun() {
-            try {
+        try {
             Utils.copyAssets(this, labelPath);
             String labelRealDir = new File(
                     this.getExternalFilesDir(null),
@@ -176,19 +186,19 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
                     this.getExternalFilesDir(null),
                     recModelPath).getAbsolutePath();
 
-                predictor.init(
-                        this,
-                        detRealModelDir,
-                        clsRealModelDir,
-                        recRealModelDir,
-                        configRealDir,
-                        labelRealDir,
-                        cpuThreadNum,
-                        cpuPowerMode);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+            predictor.init(
+                    this,
+                    detRealModelDir,
+                    clsRealModelDir,
+                    recRealModelDir,
+                    configRealDir,
+                    labelRealDir,
+                    cpuThreadNum,
+                    cpuPowerMode);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

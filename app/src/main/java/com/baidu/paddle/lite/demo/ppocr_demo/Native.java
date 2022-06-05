@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.baidu.paddle.lite.demo.common.SDKExceptions;
 import com.baidu.paddle.lite.demo.common.Utils;
+import com.baidu.paddle.lite.demo.dto.ProcessResult;
 
 public class Native {
     static {
@@ -40,11 +41,28 @@ public class Native {
         return nativeRelease(ctx);
     }
 
-    public boolean process(int inTextureId, int outTextureId, int textureWidth, int textureHeight, String savedImagePath) {
+    public boolean process(
+            int inTextureId,
+            int outTextureId,
+            int textureWidth,
+            int textureHeight,
+            String savedImagePath) {
         if (ctx == 0) {
             return false;
         }
-        run_status = nativeProcess(ctx, inTextureId, outTextureId, textureWidth, textureHeight, savedImagePath);
+        ProcessResult res = nativeProcess(
+                ctx,
+                inTextureId,
+                outTextureId,
+                textureWidth,
+                textureHeight,
+                savedImagePath
+        );
+
+        run_status = res.isSuccessful();
+        Log.d("DEBUG", "text result length: " + res.getResTextArray().length);
+        Log.d("DEBUG", "text score length: " + res.getResTextTrustArray().length);
+
         return run_status;
     }
 
@@ -59,5 +77,10 @@ public class Native {
 
     public static native boolean nativeRelease(long ctx);
 
-    public static native boolean nativeProcess(long ctx, int inTextureId, int outTextureId, int textureWidth, int textureHeight, String savedImagePath);
+    public static native ProcessResult nativeProcess(long ctx,
+                                                     int inTextureId,
+                                                     int outTextureId,
+                                                     int textureWidth,
+                                                     int textureHeight,
+                                                     String savedImagePath);
 }

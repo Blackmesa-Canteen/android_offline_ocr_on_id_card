@@ -225,7 +225,7 @@ Pipeline::Pipeline(const std::string &detModelDir,
   charactor_dict_.push_back(" ");
 }
 
-bool Pipeline::Process_val(int inTextureId, int outTextureId, int textureWidth,
+ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textureWidth,
                            int textureHeight, std::string savedImagePath) {
   double readGLFBOTime = 0, writeGLTextureTime = 0;
   double visualizeResultsTime = 0, predictTime = 0;
@@ -283,5 +283,12 @@ bool Pipeline::Process_val(int inTextureId, int outTextureId, int textureWidth,
                   rec_text_score, visualizeResultsTime, &img_vis);
 
   WriteRGBAImageBackToGLTexture(img_vis, outTextureId, &writeGLTextureTime);
-  return true;
+
+  ProcessResult* resultBean = new ProcessResult(
+          true,
+          rec_text,
+          rec_text_score
+          );
+
+  return *resultBean;
 }

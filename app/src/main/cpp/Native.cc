@@ -1,4 +1,5 @@
 // Copyright (c) 2019 PaddlePaddle Authors. All Rights Reserved.
+// Edit by Xiaotian Li on Jun 5, 2022
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@
 
 #include "Native.h"
 #include "pipeline.h"
+#include "process_result.h"
+#include <string>
 #include <android/log.h>
 
 #ifdef __cplusplus
@@ -64,7 +67,7 @@ Java_com_baidu_paddle_lite_demo_ppocr_1demo_Native_nativeRelease(JNIEnv *env,
  * Method:    nativeProcess
  * Signature: (JIIIILjava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL
+JNIEXPORT jobject JNICALL
 Java_com_baidu_paddle_lite_demo_ppocr_1demo_Native_nativeProcess(
     JNIEnv *env, jclass thiz, jlong ctx, jint inTextureId, jint outTextureId,
     jint textureWidth, jint textureHeight, jstring jsavedImagePath) {
@@ -73,8 +76,101 @@ Java_com_baidu_paddle_lite_demo_ppocr_1demo_Native_nativeProcess(
   }
   std::string savedImagePath = jstring_to_cpp_string(env, jsavedImagePath);
   Pipeline *pipeline = reinterpret_cast<Pipeline *>(ctx);
-  return pipeline->Process_val(inTextureId, outTextureId, textureWidth,
-                               textureHeight, savedImagePath);
+
+
+// TODO 内存泄漏
+  ProcessResult processResultBean = pipeline->Process_val(
+          inTextureId,
+          outTextureId,
+          textureWidth,
+          textureHeight,
+          savedImagePath
+  );
+
+  bool isSuccessful = processResultBean.getIsSuccessful();
+  std::vector<std::string> resTextVector = processResultBean.getResTextVector();
+  std::vector<float> resTextTrustVector = processResultBean.getResTextTrustVector();
+  // wrap result bean
+  // TODO 内存泄漏?
+//  std::string* resTextArray;
+//  resTextArray = new std::string[resTextVector.size()];
+//  for (int i = 0; i < resTextVector.size(); i++) {
+//    resTextArray[i] = resTextVector[i];
+//  }
+//
+  float* resTextTrustArray;
+  resTextTrustArray = new float[resTextTrustVector.size()];
+  for (int i = 0; i < resTextTrustVector.size(); i++) {
+    resTextTrustArray[i] = resTextTrustVector[i];
+  }
+
+  // get bean class from java
+  jclass  cls = env -> FindClass("com/baidu/paddle/lite/demo/dto/ProcessResult");
+
+  // get Constructor from java bean
+  jmethodID constructorId = env->GetMethodID(
+          cls,
+          "<init>",
+          "()V"
+  );
+
+  jobject processResult = env->NewObject(
+          cls,
+          constructorId
+  );
+
+  jfieldID isSuccessfulField = env->GetFieldID(
+          cls,
+          "isSuccessful",
+          "Z");
+
+  jfieldID resTextArrayField = env->GetFieldID(
+          cls,
+          "resTextArray",
+          "[Ljava/lang/String;"
+          );
+
+  jfieldID resTextTrustArrayField = env->GetFieldID(
+          cls,
+          "resTextTrustArray",
+          "[F"
+          );
+
+  // bolean field
+  env->SetBooleanField(processResult, isSuccessfulField, isSuccessful);
+
+  // string[] field
+  jobjectArray stringArrayForSaving =
+          (jobjectArray)env->NewObjectArray(
+                  resTextVector.size(),
+                  env->FindClass("java/lang/String"),
+                  env->NewStringUTF(""));
+  for (int i = 0; i < resTextVector.size(); i++) {
+    env->SetObjectArrayElement(
+            stringArrayForSaving,
+            i,
+            env->NewStringUTF(resTextVector[i].c_str())
+            );
+  }
+  env->SetObjectField(processResult, resTextArrayField, stringArrayForSaving);
+
+  // float[] field
+  jfloatArray floatArrayForSaving = env->NewFloatArray(resTextTrustVector.size());
+  for (int i = 0; i < resTextTrustVector.size(); i++) {
+    env->SetFloatArrayRegion(
+          floatArrayForSaving,
+          0,
+          resTextTrustVector.size(),
+          resTextTrustArray
+          );
+  }
+  env->SetObjectField(processResult, resTextTrustArrayField, floatArrayForSaving);
+
+  // release memory
+  delete resTextTrustArray;
+//  delete &processResultBean;
+
+  return processResult;
 }
 
 #ifdef __cplusplus

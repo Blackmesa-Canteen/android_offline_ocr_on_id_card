@@ -17,6 +17,7 @@
 #include "det_process.h"
 #include "paddle_api.h"
 #include "rec_process.h"
+#include "process_result.h"
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 #include <opencv2/core.hpp>
@@ -34,7 +35,7 @@ public:
            const int cPUThreadNum, const std::string &config_path,
            const std::string &dict_path);
 
-  bool Process_val(int inTextureId, int outTextureId, int textureWidth,
+  ProcessResult Process_val(int inTextureId, int outTextureId, int textureWidth,
                    int textureHeight, std::string savedImagePath);
 
 private:
