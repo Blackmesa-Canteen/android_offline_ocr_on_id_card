@@ -205,6 +205,12 @@ void Pipeline::VisualizeStatus(double readGLFBOTime, double writeGLTextureTime,
   offset.y += text_size.height;
   cv::putText(*rgbaImage, text, offset, font_face, font_scale, color,
               thickness);
+
+  // Visualize text results
+  sprintf(text, "text results size: %ld", rec_text.size());
+  offset.y += text_size.height;
+  cv::putText(*rgbaImage, text, offset, font_face, font_scale, color,
+              thickness);
 }
 
 Pipeline::Pipeline(const std::string &detModelDir,
@@ -225,6 +231,24 @@ Pipeline::Pipeline(const std::string &detModelDir,
   charactor_dict_.push_back(" ");
 }
 
+cv::Mat BGR2GRAY(cv::Mat img) {
+  int width = img.cols;
+  int height = img.rows;
+
+  cv::Mat out = cv::Mat::zeros(height, width, CV_8UC1);//8位无符号灰度图像
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      //RGB分量取不同的权重
+      out.at<uchar>(y, x) = 0.2126 *img.at<cv::Vec3b>(y, x)[2] \
+				+ 0.7152 * img.at<cv::Vec3b>(y, x)[1] \
+				+ 0.0722 * img.at<cv::Vec3b>(y, x)[0];
+    }
+  }
+  return out;
+}
+
+
 ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textureWidth,
                            int textureHeight, std::string savedImagePath) {
   double readGLFBOTime = 0, writeGLTextureTime = 0;
@@ -239,6 +263,31 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
   cv::cvtColor(rgbaImage, bgrImage, cv::COLOR_RGBA2BGR);
   cv::Mat bgrImage_resize;
   cv::resize(bgrImage, bgrImage_resize, cv::Size(width, height));
+
+  // remove small character On ID card: threshold
+  cv::Mat grayImage;
+  cv::cvtColor(bgrImage_resize, grayImage, cv::COLOR_BGR2GRAY);
+
+  cv::Mat binImage;
+  double threshold = 105;
+  double maxValue = 255;
+  int thresholdType = cv::THRESH_BINARY;
+  cv::threshold(grayImage,
+                        binImage,
+                        threshold,
+                        maxValue,
+                        thresholdType);
+  cv::Mat bgrImage_resize_bin;
+  cv::cvtColor(binImage, bgrImage_resize_bin, cv::COLOR_GRAY2BGR);
+
+  // 开运算去小字:
+  cv::Mat out;
+  //获取自定义核 第一个参数MORPH_RECT表示矩形的卷积核，当然还可以选择椭圆形的、交叉型的
+  cv::Mat core = getStructuringElement(cv::MORPH_RECT,
+                                          cv::Size(1, 1));
+  cv::morphologyEx(bgrImage_resize_bin, out, cv::MORPH_OPEN, core);
+
+  bgrImage_resize = out;
 
   int use_direction_classify = int(Config_["use_direction_classify"]);
   cv::Mat srcimg;
@@ -284,11 +333,11 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
 
   WriteRGBAImageBackToGLTexture(img_vis, outTextureId, &writeGLTextureTime);
 
-  ProcessResult* resultBean = new ProcessResult(
+  ProcessResult resultBean = ProcessResult(
           true,
           rec_text,
           rec_text_score
           );
 
-  return *resultBean;
+  return resultBean;
 }

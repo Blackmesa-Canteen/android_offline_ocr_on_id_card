@@ -63,6 +63,10 @@ public class Native {
         Log.d("DEBUG", "text result length: " + res.getResTextArray().length);
         Log.d("DEBUG", "text score length: " + res.getResTextTrustArray().length);
 
+        if (res.getResTextArray().length != 0) {
+            Log.d("DEBUG", "text[0] result: " + res.getResTextArray()[0]);
+        }
+
         return run_status;
     }
 
