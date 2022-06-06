@@ -41,14 +41,16 @@ public class Native {
         return nativeRelease(ctx);
     }
 
-    public boolean process(
+    public ProcessResult process(
             int inTextureId,
             int outTextureId,
             int textureWidth,
             int textureHeight,
             String savedImagePath) {
         if (ctx == 0) {
-            return false;
+            ProcessResult res = new ProcessResult();
+            res.setSuccessful(false);
+            return res;
         }
         ProcessResult res = nativeProcess(
                 ctx,
@@ -59,7 +61,6 @@ public class Native {
                 savedImagePath
         );
 
-        run_status = res.isSuccessful();
         Log.d("DEBUG", "text result length: " + res.getResTextArray().length);
         Log.d("DEBUG", "text score length: " + res.getResTextTrustArray().length);
 
@@ -67,7 +68,7 @@ public class Native {
             Log.d("DEBUG", "text[0] result: " + res.getResTextArray()[0]);
         }
 
-        return run_status;
+        return res;
     }
 
 

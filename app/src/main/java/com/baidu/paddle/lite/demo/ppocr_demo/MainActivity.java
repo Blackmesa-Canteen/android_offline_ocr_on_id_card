@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,10 +21,13 @@ import android.widget.Toast;
 
 import com.baidu.paddle.lite.demo.common.CameraSurfaceView;
 import com.baidu.paddle.lite.demo.common.Utils;
+import com.baidu.paddle.lite.demo.dto.ProcessResult;
+import com.baidu.paddle.lite.demo.util.IdCardUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, CameraSurfaceView.OnTextureChangedListener {
@@ -90,6 +94,26 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
         }
     }
 
+    private void doOcrOnIdResult(ProcessResult processResult) {
+        // at least 7 result and at most 10
+        String[] textArray = processResult.getResTextArray();
+        if (textArray.length < 7 || textArray.length > 10) {
+            return;
+        }
+
+        for (String str : textArray) {
+            Log.d("word_res", "str: " + str);
+        }
+
+        Log.d("word_res", "=================");
+
+        List<String> stringList = IdCardUtil.preprocessResStringArray(
+                textArray
+        );
+
+
+    }
+
     @Override
     public boolean onTextureChanged(int inTextureId, int outTextureId, int textureWidth, int textureHeight) {
         String savedImagePath = "";
@@ -97,12 +121,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
             savedImagePath = MainActivity.this.savedImagePath;
         }
         savedImagePath = Utils.getDCIMDirectory() + File.separator + "result.jpg";
-        boolean modified = predictor.process(
+        ProcessResult processResult = predictor.process(
                 inTextureId,
                 outTextureId,
                 textureWidth,
                 textureHeight,
                 savedImagePath);
+
+        boolean modified = processResult.isSuccessful();
         if (!savedImagePath.isEmpty()) {
             synchronized (this) {
                 MainActivity.this.savedImagePath = "";
@@ -120,6 +146,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
             lastFrameIndex = 0;
             lastFrameTime = System.nanoTime();
         }
+
+        doOcrOnIdResult(processResult);
         return modified;
     }
 

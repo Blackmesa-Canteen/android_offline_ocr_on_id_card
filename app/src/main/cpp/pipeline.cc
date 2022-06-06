@@ -231,23 +231,6 @@ Pipeline::Pipeline(const std::string &detModelDir,
   charactor_dict_.push_back(" ");
 }
 
-cv::Mat BGR2GRAY(cv::Mat img) {
-  int width = img.cols;
-  int height = img.rows;
-
-  cv::Mat out = cv::Mat::zeros(height, width, CV_8UC1);//8位无符号灰度图像
-
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      //RGB分量取不同的权重
-      out.at<uchar>(y, x) = 0.2126 *img.at<cv::Vec3b>(y, x)[2] \
-				+ 0.7152 * img.at<cv::Vec3b>(y, x)[1] \
-				+ 0.0722 * img.at<cv::Vec3b>(y, x)[0];
-    }
-  }
-  return out;
-}
-
 
 ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textureWidth,
                            int textureHeight, std::string savedImagePath) {
@@ -268,26 +251,46 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
   cv::Mat grayImage;
   cv::cvtColor(bgrImage_resize, grayImage, cv::COLOR_BGR2GRAY);
 
-  cv::Mat binImage;
-  double threshold = 105;
-  double maxValue = 255;
-  int thresholdType = cv::THRESH_BINARY;
-  cv::threshold(grayImage,
-                        binImage,
-                        threshold,
-                        maxValue,
-                        thresholdType);
-  cv::Mat bgrImage_resize_bin;
-  cv::cvtColor(binImage, bgrImage_resize_bin, cv::COLOR_GRAY2BGR);
-
-  // 开运算去小字:
+//  cv::Mat binImage;
+//  double threshold = 120;
+//  double maxValue = 255;
+//  int thresholdType = cv::THRESH_BINARY;
+//  cv::threshold(grayImage,
+//                        binImage,
+//                        threshold,
+//                        maxValue,
+//                        thresholdType);
+//
+//  cv::Mat bgrImage_resize_bin;
+//  cv::cvtColor(binImage, bgrImage_resize_bin, cv::COLOR_GRAY2BGR);
+//
+//  // get label mask
+//  cv::Mat hsvImage;
+//  cv::cvtColor(bgrImage_resize, hsvImage, cv::COLOR_BGR2HSV);
+//  cv::Mat labelMaskImage;
+//  cv::inRange(hsvImage, cv::Scalar(35, 43, 46) , cv::Scalar(124, 255, 255), labelMaskImage);
+//
+//  // expand label mask zone
+//  cv::Mat expendedLabelMaskImage;
+//  cv::Mat element = getStructuringElement(cv::MORPH_RECT, cv::Size(1, 1));
+//  cv::erode(labelMaskImage, expendedLabelMaskImage, element);
+//
+//  cv::Mat join_img;
+//  cv::bitwise_or(expendedLabelMaskImage, binImage, join_img);
   cv::Mat out;
-  //获取自定义核 第一个参数MORPH_RECT表示矩形的卷积核，当然还可以选择椭圆形的、交叉型的
-  cv::Mat core = getStructuringElement(cv::MORPH_RECT,
-                                          cv::Size(1, 1));
-  cv::morphologyEx(bgrImage_resize_bin, out, cv::MORPH_OPEN, core);
+//  cv::bitwise_not(join_img, out);
 
-  bgrImage_resize = out;
+  // remove noise
+  //获取自定义核 第一个参数MORPH_RECT表示矩形的卷积核，当然还可以选择椭圆形的、交叉型的
+//  cv::Mat core = getStructuringElement(cv::MORPH_RECT,
+//                                          cv::Size(2, 2));
+//  cv::morphologyEx(out, out, cv::MORPH_OPEN, core);
+
+  cv::cvtColor(grayImage, out, cv::COLOR_GRAY2BGR);
+
+  // TODO 下一级
+//  bgrImage_resize = bgrImage_resize_bin;
+    bgrImage_resize = out;
 
   int use_direction_classify = int(Config_["use_direction_classify"]);
   cv::Mat srcimg;
