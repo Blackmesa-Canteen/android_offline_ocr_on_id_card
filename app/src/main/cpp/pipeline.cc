@@ -247,9 +247,62 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
   cv::Mat bgrImage_resize;
   cv::resize(bgrImage, bgrImage_resize, cv::Size(width, height));
 
-  // remove small character On ID card: threshold
+  /* threshold */
+  // Get green channel, which is suitable for ID card
+  std::vector<cv::Mat> channels(3);
+  cv::split(bgrImage_resize, channels);
   cv::Mat grayImage;
-  cv::cvtColor(bgrImage_resize, grayImage, cv::COLOR_BGR2GRAY);
+  grayImage = channels[1];
+
+  // medianBlur
+//  cv::medianBlur(grayImage, grayImage, 1);
+//
+  // threshold
+  cv::Mat binImageTotal;
+  cv::threshold(grayImage, binImageTotal, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+
+// /* Locate ID card zone */
+//  cv::Mat canny;
+//  cv::Canny(binImage, canny, 100, 150);
+//  cv::Mat element = getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
+//  cv::Mat dilated;
+//  cv::dilate(canny, dilated, element,cv::Point(-1, -1), 15);
+//
+//  std::vector<std::vector<cv::Point>> contours;
+//  std::vector<cv::Vec4i> hierarchy;
+//
+//  cv::Mat grayImageCopy;
+//  grayImageCopy = grayImage.clone();
+//  cv::findContours(dilated, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+//
+//
+//  cv::drawContours(grayImageCopy, contours, -1, cv::Scalar(255, 0, 0), 20);
+//  binImage = grayImageCopy;
+
+    /* find word zone */
+    // medianBlur
+    cv::medianBlur(grayImage, grayImage, 1);
+
+    // threshold
+    cv::Mat binImage;
+    cv::threshold(grayImage, binImage, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+
+    cv::Mat blurredImage;
+    cv::medianBlur(binImage, blurredImage, 5);
+
+    // open: 先腐蚀后膨胀
+    cv::Mat element = getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
+    cv::Mat openedImage;
+    cv::morphologyEx(blurredImage, openedImage, cv::MORPH_OPEN, element);
+
+    // emphasize text zone
+    element = getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7));
+    cv::Mat dilatedTextZoneImage;
+    cv::dilate(openedImage, dilatedTextZoneImage, element, cv::Point(-1,-1), 6);
+
+    binImage = binImageTotal;
+
+
 
 //  cv::Mat binImage;
 //  double threshold = 120;
@@ -286,7 +339,7 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
 //                                          cv::Size(2, 2));
 //  cv::morphologyEx(out, out, cv::MORPH_OPEN, core);
 
-  cv::cvtColor(grayImage, out, cv::COLOR_GRAY2BGR);
+  cv::cvtColor(binImage, out, cv::COLOR_GRAY2BGR);
 
   // TODO 下一级
 //  bgrImage_resize = bgrImage_resize_bin;
