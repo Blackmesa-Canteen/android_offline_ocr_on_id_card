@@ -170,8 +170,12 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
         if (w > 0 && h > 0) {
             float ratio = h > w ? 0.9f : 0.72f;
 
-            int width = (int) (w * ratio);
-            int height = width * 400 / 620;
+//            int width = (int) (w * ratio);
+//            int height = width * 400 / 620;
+            double fact = 1.2;
+//            double heightFact = 1.2;
+            int width = (int) (w * ratio * fact);
+            int height = (int) (width * 400 * fact / 620);
 
             int left = (w - width) / 2;
             int top = (h - height) / 2;
@@ -200,10 +204,10 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
         float width = right - left;
         float height = bottom - top;
         if (rx > width / 2) {
-            rx = width / 2;
+            rx = width / 2 + 10;
         }
         if (ry > height / 2) {
-            ry = height / 2;
+            ry = height / 2 + 10;
         }
         float widthMinusCorners = (width - (2 * rx));
         float heightMinusCorners = (height - (2 * ry));
@@ -251,10 +255,15 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
 //                (int) (top + (20f / 632) * height),
 //                (int) (left + (303f / 1006) * width),
 //                (int) (top + (416f / 632) * height));
-//
-//        if (locatorDrawable != null) {
-//            locatorDrawable.draw(canvas);
-//        }
+        locatorDrawable.setBounds(
+                (int) (left + 630f / 1006 * width),
+                (int) (top + (60f / 632) * height),
+                (int) (left + (960f / 1006) * width),
+                (int) (top + (500f / 632) * height));
+
+        if (locatorDrawable != null) {
+            locatorDrawable.draw(canvas);
+        }
     }
 
 
