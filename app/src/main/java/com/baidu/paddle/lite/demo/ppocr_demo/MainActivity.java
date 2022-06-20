@@ -4,10 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -43,12 +41,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
     long lastFrameTime;
 
     // Model settings of object detection
-    protected String detModelPath = "ch_ppocr_mobile_v2.0_det_slim_opt.nb";
-    protected String recModelPath = "ch_ppocr_mobile_v2.0_rec_slim_opt.nb";
-    protected String clsModelPath = "ch_ppocr_mobile_v2.0_cls_slim_opt.nb";
+    protected String detModelPath = "ch_ppocr_mobile_v2.0_det_slim_opt_original.nb";
+    protected String recModelPath = "ch_ppocr_mobile_v2.0_rec_slim_opt_original.nb";
+    protected String clsModelPath = "ch_ppocr_mobile_v2.0_cls_slim_opt_original.nb";
     protected String labelPath = "ppocr_keys_v1.txt";
+
     protected String configPath = "config.txt";
-    protected int cpuThreadNum = 1;
+    protected int cpuThreadNum = 2;
     protected String cpuPowerMode = "LITE_POWER_HIGH";
 
     // result text array of OCR
@@ -185,6 +184,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
         btnSwitch.setOnClickListener(this);
         btnShutter = (ImageButton) findViewById(R.id.btn_shutter);
         btnShutter.setOnClickListener(this);
+
+        svPreview.setMask();
     }
 
     public void checkRun() {
