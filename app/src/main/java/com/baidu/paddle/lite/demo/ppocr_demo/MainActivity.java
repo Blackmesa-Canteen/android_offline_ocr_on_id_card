@@ -25,7 +25,7 @@ import com.baidu.paddle.lite.demo.util.IdCardUtil;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, CameraSurfaceView.OnTextureChangedListener {
@@ -106,11 +106,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
 
         Log.d("word_res", "=================");
 
-        List<String> stringList = IdCardUtil.preprocessResStringArray(
+        Map<String, String> resultMap = IdCardUtil.preprocessResStringMap(
                 textArray
         );
 
-
+        if (IdCardUtil.isResultMapSatisfied(resultMap)) {
+            Log.d("word_res", "resultMap: " + resultMap.toString());
+        }
     }
 
     @Override
