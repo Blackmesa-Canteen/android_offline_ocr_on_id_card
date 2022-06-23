@@ -75,6 +75,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:scaleType="fitXY"
+                    android:visibility="invisible"
                     android:src="@drawable/btn_shutter" />
 
             </RelativeLayout>

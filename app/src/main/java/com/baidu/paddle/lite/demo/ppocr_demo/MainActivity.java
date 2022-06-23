@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,11 +21,14 @@ import android.widget.Toast;
 import com.baidu.paddle.lite.demo.common.CameraSurfaceView;
 import com.baidu.paddle.lite.demo.common.Utils;
 import com.baidu.paddle.lite.demo.dto.ProcessResult;
+import com.baidu.paddle.lite.demo.util.Constants;
 import com.baidu.paddle.lite.demo.util.IdCardUtil;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -106,12 +110,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
 
         Log.d("word_res", "=================");
 
-        Map<String, String> resultMap = IdCardUtil.preprocessResStringMap(
+        HashMap<String, String> resultMap = IdCardUtil.preprocessResStringMap(
                 textArray
         );
-
+        Log.d("word_res", "resultMap: " + resultMap.toString());
         if (IdCardUtil.isResultMapSatisfied(resultMap)) {
-            Log.d("word_res", "resultMap: " + resultMap.toString());
+            // jump to new activity
+            Intent intent = new Intent(this, IdInputActivity.class);
+            intent.putExtra(Constants.OCR_RESULT_MAP, resultMap);
+            startActivity(intent);
         }
     }
 

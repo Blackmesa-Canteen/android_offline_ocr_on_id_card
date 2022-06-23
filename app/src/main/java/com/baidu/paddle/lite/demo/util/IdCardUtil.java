@@ -19,8 +19,8 @@ public class IdCardUtil {
     }
 
 
-    public static Map<String, String> preprocessResStringMap(String[] textArray) {
-        Map<String, String> resultMap = new HashMap<>(8);
+    public static HashMap<String, String> preprocessResStringMap(String[] textArray) {
+        HashMap<String, String> resultMap = new HashMap<>(8);
 
         // prefill result set
         resultMap.put(Constants.NAME, Constants.UNKNOWN);
@@ -135,14 +135,14 @@ public class IdCardUtil {
                     resultMap.put(Constants.BIRTH_YEAR, str);
                     continue;
                 }
-            } else if (isBirthMonthNotEdited && i > 3 && isTextNumeric(str) && str.length() < 3) {
+            } else if (isBirthMonthNotEdited && i > 2 && isTextNumeric(str) && str.length() < 3) {
                 int monthNumber = Integer.parseInt(str);
                 if (monthNumber > 0 && monthNumber < 13) {
                     resultMap.put(Constants.BIRTH_MONTH, str);
                     continue;
                 }
 
-            } else if (isBirthDayNotEdited && i > 4 && isTextNumeric(str) && str.length() < 3) {
+            } else if (isBirthDayNotEdited && i > 2 && isTextNumeric(str) && str.length() < 3) {
                 int dayNumber = Integer.parseInt(str);
                 if (dayNumber > 0 && dayNumber < 32) {
                     resultMap.put(Constants.BIRTH_DAY, str);
