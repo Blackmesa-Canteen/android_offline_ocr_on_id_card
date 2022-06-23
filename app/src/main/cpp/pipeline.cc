@@ -313,14 +313,15 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     cv::Mat out;
     out = dilatedTextZoneImage;
 
-//    // 加强原图文字区域: 文字区域更黑
-//    cv::bitwise_and(bgrImage_resize, bgrImage_resize, out, bin_and_res);
-//
-//    // 重新二值化
-//    cv::cvtColor(out, out, cv::COLOR_BGR2GRAY);
-//
+    // 分解原先彩图
+    cv::bitwise_and(bgrImage_resize, bgrImage_resize, out, dilatedTextZoneImage);
+
+    // 重新二值化
+    cv::cvtColor(out, out, cv::COLOR_BGR2GRAY);
+
 //    cv::threshold(out, out, 10, 255, cv::THRESH_BINARY);
-//
+
+
     cv::cvtColor(out, out, cv::COLOR_GRAY2BGR);
 
     int use_direction_classify = int(Config_["use_direction_classify"]);
