@@ -18,4 +18,7 @@ public class Constants {
     public static int END_YEAR = 2077;
 
     public static String OCR_RESULT_MAP = "ocr_res_map";
+
+    public static int MALE = 0;
+    public static int FEMALE = 1;
 }

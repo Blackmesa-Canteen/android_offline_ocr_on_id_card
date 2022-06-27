@@ -124,32 +124,33 @@ public class IdCardUtil {
                 continue;
             }
 
-            // handle birth
-            boolean isBirthYearNotEdited = Objects.equals(resultMap.get(Constants.BIRTH_YEAR), Constants.UNKNOWN);
-            boolean isBirthMonthNotEdited = Objects.equals(resultMap.get(Constants.BIRTH_MONTH), Constants.UNKNOWN);
-            boolean isBirthDayNotEdited = Objects.equals(resultMap.get(Constants.BIRTH_DAY), Constants.UNKNOWN);
+            // handle birth (No need to do so, parse ID number instead)
+//            boolean isBirthYearNotEdited = Objects.equals(resultMap.get(Constants.BIRTH_YEAR), Constants.UNKNOWN);
+//            boolean isBirthMonthNotEdited = Objects.equals(resultMap.get(Constants.BIRTH_MONTH), Constants.UNKNOWN);
+//            boolean isBirthDayNotEdited = Objects.equals(resultMap.get(Constants.BIRTH_DAY), Constants.UNKNOWN);
+//
+//            if (isBirthYearNotEdited && i > 2 && isTextNumeric(str) && str.length() == 4) {
+//                int yearNumber = Integer.parseInt(str);
+//                if (yearNumber > Constants.START_YEAR && yearNumber < Constants.END_YEAR) {
+//                    resultMap.put(Constants.BIRTH_YEAR, str);
+//                    continue;
+//                }
+//            } else if (isBirthMonthNotEdited && i > 2 && isTextNumeric(str) && str.length() < 3) {
+//                int monthNumber = Integer.parseInt(str);
+//                if (monthNumber > 0 && monthNumber < 13) {
+//                    resultMap.put(Constants.BIRTH_MONTH, str);
+//                    continue;
+//                }
+//
+//            } else if (isBirthDayNotEdited && i > 2 && isTextNumeric(str) && str.length() < 3) {
+//                int dayNumber = Integer.parseInt(str);
+//                if (dayNumber > 0 && dayNumber < 32) {
+//                    resultMap.put(Constants.BIRTH_DAY, str);
+//                    continue;
+//                }
+//            }
 
-            if (isBirthYearNotEdited && i > 2 && isTextNumeric(str) && str.length() == 4) {
-                int yearNumber = Integer.parseInt(str);
-                if (yearNumber > Constants.START_YEAR && yearNumber < Constants.END_YEAR) {
-                    resultMap.put(Constants.BIRTH_YEAR, str);
-                    continue;
-                }
-            } else if (isBirthMonthNotEdited && i > 2 && isTextNumeric(str) && str.length() < 3) {
-                int monthNumber = Integer.parseInt(str);
-                if (monthNumber > 0 && monthNumber < 13) {
-                    resultMap.put(Constants.BIRTH_MONTH, str);
-                    continue;
-                }
-
-            } else if (isBirthDayNotEdited && i > 2 && isTextNumeric(str) && str.length() < 3) {
-                int dayNumber = Integer.parseInt(str);
-                if (dayNumber > 0 && dayNumber < 32) {
-                    resultMap.put(Constants.BIRTH_DAY, str);
-                    continue;
-                }
-            }
-
+            // handle Address text
             boolean isAddressNotEdited = Objects.equals(resultMap.get(Constants.ADDRESS), Constants.UNKNOWN);
             if (isAddressNotEdited && i > 5 && !isTextNumeric(str) && !isTextIdNumber(str)) {
                 StringBuilder resAddressSb = new StringBuilder();
@@ -165,8 +166,24 @@ public class IdCardUtil {
                 continue;
             }
 
+            // handle Id number
             if (isTextIdNumber(str)) {
                 resultMap.put(Constants.ID, str);
+
+                // get gender
+                int gender = IdNumberUtil.getSex(str);
+                if (gender == Constants.MALE) {
+                    resultMap.put(Constants.GENDER, "男");
+                } else {
+                    resultMap.put(Constants.GENDER, "女");
+                }
+
+                // get birth info
+                String birthText = IdNumberUtil.getBirthday(str);
+                String[] birthTextArray = birthText.split("-");
+                resultMap.put(Constants.BIRTH_YEAR, birthTextArray[0]);
+                resultMap.put(Constants.BIRTH_MONTH, birthTextArray[1]);
+                resultMap.put(Constants.BIRTH_DAY, birthTextArray[2]);
             }
         }
 
