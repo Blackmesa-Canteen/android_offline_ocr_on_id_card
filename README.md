@@ -2,57 +2,6 @@
  在 Android APP 上，实现实时的 OCR 文字识别功能。此 Demo 有很好的的易用性和开放性，如在 Demo 中跑自己训练好的模型等。
  本文主要介绍 OCR 文字识别 Demo 的运行方法和如何在更新模型/输入/输出处理下，保证 Demo 仍可继续运行。
 
-## 如何运行 OCR 文字识别 Demo
-
-### 环境准备
-
-1. 在本地环境安装好 Android Studio 工具，详细安装方法请见[Android Stuido 官网](https://developer.android.com/studio)。
-2. 准备一部 Android 手机，并开启 USB 调试模式。开启方法: `手机设置 -> 查找开发者选项 -> 打开开发者选项和 USB 调试模式`
-
-**注意**：如果您的 Android Studio 尚未配置 NDK ，请根据 Android Studio 用户指南中的[安装及配置 NDK 和 CMake ](https://developer.android.com/studio/projects/install-ndk)内容，预先配置好 NDK 。您可以选择最新的 NDK 版本，或者使用
-Paddle Lite 预测库版本一样的 NDK
-
- ### 部署步骤
-
- 1. OCR 文字识别 Demo 位于 `Paddle-Lite-Demo/ocr/Android/app/c++/ppocr_demo` 目录
- 2. cd `Paddle-Lite-Demo/libs` 目录，运行 `download.sh` 脚本，下载所需要的 Paddle Lite 预测库
- 3. cd `Paddle-Lite-Demo/ocr/assets` 目录，运行 `download.sh` 脚本，下载OPT 优化后模型、测试图片和标签文件
- 4. cd `Paddle-Lite-Demo/ocr/Android/app/c++/ppocr_demo` 目录，运行 `prepare.sh` 脚本， 将模型、测试图片等资源文件拷贝到当前工程中
- 5. 用 Android Studio 打开 ppocr_demo 工程
- 6. 手机连接电脑，打开 USB 调试和文件传输模式，并在 Android Studio 上连接自己的手机设备（手机需要开启允许从 USB 安装软件权限）
- 
- <p align="center">
- <img src="https://paddlelite-demo.bj.bcebos.com/demo/ocr/docs_img/android/run_ppocr_app.jpg"/>
- </p>
- 
-> **注意：**
->> 如果您在导入项目、编译或者运行过程中遇到 NDK 配置错误的提示，请打开 ` File > Project Structure > SDK Location`，修改 `Andriod NDK location` 为您本机配置的 NDK 所在路径。
->> 如果您是通过 Andriod Studio 的 SDK Tools 下载的 NDK (见本章节"环境准备")，可以直接点击下拉框选择默认路径。
->> 还有一种 NDK 配置方法，你可以在 `image_classifiction_demo/local.properties` 文件中手动完成 NDK 路径配置，如下图所示
->> 如果以上步骤仍旧无法解决 NDK 配置错误，请尝试根据 Andriod Studio 官方文档中的[更新 Android Gradle 插件](https://developer.android.com/studio/releases/gradle-plugin?hl=zh-cn#updating-plugin)章节，尝试更新Android Gradle plugin版本。
-
-7. 点击 Run 按钮，自动编译 APP 并安装到手机。(该过程会自动下载 Paddle Lite 预测库和模型，需要联网)
-成功后效果如下：
-
-  | APP 图标 | APP 效果 |
-  | ---     | --- |
-  | ![app_pic width="300" height="500"](https://paddlelite-demo.bj.bcebos.com/demo/ocr/docs_img/android/ppocr_app_pic.jpg)   | ![app_res width="300" height="500"](https://paddlelite-demo.bj.bcebos.com/demo/ocr/docs_img/android/ppocr_app_run.jpg) |
-
- ```shell
- cd Paddle-Lite-Demo/libs
- # 下载所需要的 Paddle Lite 预测库
- sh download.sh
- cd ../ocr/assets
- # 下载OPT 优化后模型、测试图片、标签文件及 config 文件
- sh download.sh
- cd ../android/app/c++/ppocr_demo
- # 将预测库、模型等资源文件拷贝到当前工程中
- sh prepare.sh
- # 用 Android Studio 打开 ppocr_demo 工程, 完成APP编译和运行
- ```
-
- ## 如何更新预测库
-
 * Paddle Lite 项目：https://github.com/PaddlePaddle/Paddle-Lite
  * 参考 [Paddle Lite 源码编译文档](https://paddle-lite.readthedocs.io/zh/latest/source_compile/compile_env.html)，编译 Android 预测库
  * 编译最终产物位于 `build.lite.xxx.xxx.xxx` 下的 `inference_lite_lib.xxx.xxx`
@@ -339,6 +288,3 @@ Paddle Lite 预测库版本一样的 NDK
 
    - `std::vector<std::vector<std::vector<int>>> BoxesFromBitmap(...)` 方法从 Bitmap 图中获取检测框
    - `std::vector<std::vector<std::vector<int>>> FilterTagDetRes(...)` 方法根据识别结果获取目标框位置
-
-## 性能优化方法
-如果你觉得当前性能不符合需求，想进一步提升模型性能，可参考[首页中性能优化文档](/README.md)完成性能优化。
