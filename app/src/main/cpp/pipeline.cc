@@ -317,7 +317,7 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
 
     // 重新二值化
 //    cv::cvtColor(out, out, cv::COLOR_BGR2GRAY);
-    cv::threshold(out, out, 95, 255, cv::THRESH_BINARY);
+    cv::threshold(out, out, 100, 255, cv::THRESH_BINARY);
     cv::Mat negativeDialatedTextZoneImage;
     cv::bitwise_not(dilatedTextZoneImage, negativeDialatedTextZoneImage);
 

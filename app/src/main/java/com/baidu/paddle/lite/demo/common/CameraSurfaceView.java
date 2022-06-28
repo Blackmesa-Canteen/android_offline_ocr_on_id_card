@@ -23,6 +23,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.baidu.paddle.lite.demo.dto.CameraRectangleZone;
 import com.baidu.paddle.lite.demo.ppocr_demo.R;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -41,6 +42,8 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
     public static final int EXPECTED_PREVIEW_WIDTH = 1280;
     public static final int EXPECTED_PREVIEW_HEIGHT = 720;
 
+    private boolean isLightOn = false;
+    private CameraRectangleZone zone = new CameraRectangleZone();
 
     protected int numberOfCameras;
     protected int selectedCameraId;
@@ -255,11 +258,16 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
 //                (int) (top + (20f / 632) * height),
 //                (int) (left + (303f / 1006) * width),
 //                (int) (top + (416f / 632) * height));
+        zone.setTopLeft_x((int) (left + 630f / 1006 * width));
+        zone.setTopLeft_y((int) (top + (60f / 632) * height));
+        zone.setBottomRight_x((int) (left + (960f / 1006) * width));
+        zone.setBottomRight_y((int) (top + (500f / 632) * height));
+
         locatorDrawable.setBounds(
-                (int) (left + 630f / 1006 * width),
-                (int) (top + (60f / 632) * height),
-                (int) (left + (960f / 1006) * width),
-                (int) (top + (500f / 632) * height));
+                zone.getTopLeft_x(),
+                zone.getTopLeft_y(),
+                zone.getBottomRight_x(),
+                zone.getBottomRight_y());
 
         if (locatorDrawable != null) {
             locatorDrawable.draw(canvas);
@@ -402,6 +410,20 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
         openCamera();
     }
 
+    public void switchCameraLight() {
+        if (!isLightOn) {
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(parameters);
+            isLightOn = !isLightOn;
+        } else {
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(parameters);
+            isLightOn = !isLightOn;
+        }
+    }
+
     public void openCamera() {
         if (disableCamera) {
             return;
@@ -461,6 +483,12 @@ public class CameraSurfaceView extends GLSurfaceView implements Renderer,
         if (camera != null) {
             camera.setPreviewCallback(null);
             camera.stopPreview();
+            if (isLightOn) {
+                Camera.Parameters parameters = camera.getParameters();
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                camera.setParameters(parameters);
+                isLightOn = !isLightOn;
+            }
             camera.release();
             camera = null;
         }
