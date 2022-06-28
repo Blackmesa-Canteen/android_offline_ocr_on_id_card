@@ -248,6 +248,9 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     cv::Mat bgrImage_resize;
     cv::resize(bgrImage, bgrImage_resize, cv::Size(width, height));
 
+    // colorful image for user viewing
+    cv::Mat outImageForUserView = bgrImage_resize;
+
     // 直方图增强对比度
 //    cv::equalizeHist(bgrImage_resize, bgrImage_resize);
 
@@ -261,24 +264,6 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     // threshold
     cv::Mat binImageTotal;
     cv::threshold(grayImage, binImageTotal, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-
-// /* Locate ID card zone */
-//  cv::Mat canny;
-//  cv::Canny(binImage, canny, 100, 150);
-//  cv::Mat element = getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
-//  cv::Mat dilated;
-//  cv::dilate(canny, dilated, element,cv::Point(-1, -1), 15);
-//
-//  std::vector<std::vector<cv::Point>> contours;
-//  std::vector<cv::Vec4i> hierarchy;
-//
-//  cv::Mat grayImageCopy;
-//  grayImageCopy = grayImage.clone();
-//  cv::findContours(dilated, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-//
-//
-//  cv::drawContours(grayImageCopy, contours, -1, cv::Scalar(255, 0, 0), 20);
-//  binImage = grayImageCopy;
 
     /* find word zone */
     // medianBlur
@@ -359,7 +344,7 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     }
     predictTime = GetElapsedTime(t);
     // visualization
-    auto img_res = Visualization(out, boxes, savedImagePath);
+    auto img_res = Visualization(outImageForUserView, boxes, savedImagePath);
     cv::Mat img_vis;
     cv::resize(img_res, img_vis, cv::Size(textureWidth, textureHeight));
     cv::cvtColor(img_vis, img_vis, cv::COLOR_BGR2RGBA);
