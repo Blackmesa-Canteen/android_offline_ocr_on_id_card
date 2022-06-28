@@ -311,16 +311,19 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     cv::bitwise_not(bin_and_res, bin_and_res);
 
     cv::Mat out;
-    out = dilatedTextZoneImage;
 
     // 分解原先彩图
-    cv::bitwise_and(bgrImage_resize, bgrImage_resize, out, dilatedTextZoneImage);
+    cv::bitwise_and(grayImage, grayImage, out, dilatedTextZoneImage);
 
     // 重新二值化
-    cv::cvtColor(out, out, cv::COLOR_BGR2GRAY);
+//    cv::cvtColor(out, out, cv::COLOR_BGR2GRAY);
+    cv::threshold(out, out, 95, 255, cv::THRESH_BINARY);
+    cv::Mat negativeDialatedTextZoneImage;
+    cv::bitwise_not(dilatedTextZoneImage, negativeDialatedTextZoneImage);
 
-//    cv::threshold(out, out, 10, 255, cv::THRESH_BINARY);
-
+    // 生成更精准的白底黑子文字区域
+    cv::bitwise_and(out, dilatedTextZoneImage, out);
+    cv::bitwise_xor(out,negativeDialatedTextZoneImage, out);
 
     cv::cvtColor(out, out, cv::COLOR_GRAY2BGR);
 

@@ -14,7 +14,7 @@ public class IdCardUtil {
         String unknownVal = Constants.UNKNOWN;
         return !Objects.equals(resultMap.get(Constants.ID), unknownVal) &&
                 !Objects.equals(resultMap.get(Constants.NAME), unknownVal) &&
-                !Objects.equals(resultMap.get(Constants.BIRTH_YEAR), unknownVal) &&
+                !Objects.equals(resultMap.get(Constants.ADDRESS), unknownVal) &&
                 !Objects.equals(resultMap.get(Constants.NATION), unknownVal);
     }
 
@@ -152,13 +152,16 @@ public class IdCardUtil {
 
             // handle Address text
             boolean isAddressNotEdited = Objects.equals(resultMap.get(Constants.ADDRESS), Constants.UNKNOWN);
-            if (isAddressNotEdited && i > 5 && !isTextNumeric(str) && !isTextIdNumber(str)) {
+            if (isAddressNotEdited && i > 4 && !isTextNumeric(str) && (str.contains("省") || str.contains("市"))) {
                 StringBuilder resAddressSb = new StringBuilder();
                 resAddressSb.append(str);
-                if (i + 1 < textArray.length) {
-                    String str2 = textArray[i + 1];
-                    if (!isTextIdNumber(str2)) {
+                int ptr = i;
+                while (++ptr < textArray.length) {
+                    String str2 = textArray[ptr];
+                    if (!isTextIdNumber(str2) && !isTextNumeric(str2)) {
                         resAddressSb.append(str2);
+                    } else {
+                        break;
                     }
                 }
 
