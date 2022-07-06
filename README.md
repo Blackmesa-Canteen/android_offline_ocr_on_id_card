@@ -1,6 +1,15 @@
 # OCR Android 身份证识别 Demo 使用指南
+
+## 简介
+Android用离线身份证OCR识别. 包含了CV图像预处理, 以及OCR文字识别.
+
+## 部署
+应该能够正常运行, 如果出了问题, 应该是缺失了paddleLite预测依赖库和openCV依赖库, 请参考以下开源项目的安装说明配置好依赖库:
+[Paddle-Lite-Demo](https://github.com/PaddlePaddle/Paddle-Lite-Demo)
+ 
+ ## 升级预测模型
  **注意：**
- 如果预测库有版本升级，建议同步更新 OPT 优化后的模型。例如，预测库升级至 2.10—rc 版本，需要做以下操作：
+ 如果预测模型有版本升级，建议同步更新 OPT 优化后的模型。例如，预测库升级至 2.10—rc 版本，需要做以下操作：
 
  ```shell
  # 下载 PaddleOCR V2.0 版本的中英文 inference 模型
