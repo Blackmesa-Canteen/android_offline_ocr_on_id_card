@@ -50,6 +50,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
     protected String recModelPath = "ch_ppocr_mobile_v2.0_rec_slim_opt_original.nb";
     protected String clsModelPath = "ch_ppocr_mobile_v2.0_cls_slim_opt_original.nb";
     protected String labelPath = "ppocr_keys_v1.txt";
+    protected String nationPath = "nation.txt";
 
     protected String configPath = "config.txt";
     protected int cpuThreadNum = 2;
@@ -225,6 +226,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
             String recRealModelDir = new File(
                     this.getExternalFilesDir(null),
                     recModelPath).getAbsolutePath();
+
 
             predictor.init(
                     this,

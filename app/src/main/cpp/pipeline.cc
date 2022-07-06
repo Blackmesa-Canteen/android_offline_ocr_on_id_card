@@ -251,15 +251,16 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     // colorful image for user viewing
     cv::Mat outImageForUserView = bgrImage_resize;
 
-    // 直方图增强对比度
-//    cv::equalizeHist(bgrImage_resize, bgrImage_resize);
 
     /* threshold */
-    // Get green channel, which is suitable for ID card
+    // 取出绿色通道更能抵抗花纹干扰
     std::vector<cv::Mat> channels(3);
     cv::split(bgrImage_resize, channels);
     cv::Mat grayImage;
     grayImage = channels[1];
+
+    // 高斯滤波平滑文字
+    cv::GaussianBlur(grayImage, grayImage, cv::Size(1, 1), 0);
 
     // threshold
     cv::Mat binImageTotal;
@@ -267,11 +268,12 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
 
     /* find word zone */
     // medianBlur
-    cv::medianBlur(grayImage, grayImage, 1);
+    cv::Mat medianGrayImage;
+    cv::medianBlur(grayImage, medianGrayImage, 1);
 
     // threshold
     cv::Mat binImage;
-    cv::threshold(grayImage, binImage, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+    cv::threshold(medianGrayImage, binImage, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
 
     cv::Mat blurredImage;
     cv::medianBlur(binImage, blurredImage, 3);
@@ -297,7 +299,7 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
 
     cv::Mat out;
 
-    // 分解原先彩图
+    // 直接给最初的灰度图套蒙版, 取出文字
     cv::bitwise_and(grayImage, grayImage, out, dilatedTextZoneImage);
 
     // 重新二值化
@@ -344,7 +346,7 @@ ProcessResult Pipeline::Process_val(int inTextureId, int outTextureId, int textu
     }
     predictTime = GetElapsedTime(t);
     // visualization
-    auto img_res = Visualization(outImageForUserView, boxes, savedImagePath);
+    auto img_res = Visualization(out, boxes, savedImagePath);
     cv::Mat img_vis;
     cv::resize(img_res, img_vis, cv::Size(textureWidth, textureHeight));
     cv::cvtColor(img_vis, img_vis, cv::COLOR_BGR2RGBA);

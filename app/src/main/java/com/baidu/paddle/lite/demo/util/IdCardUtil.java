@@ -1,14 +1,32 @@
 package com.baidu.paddle.lite.demo.util;
 
+import android.util.Log;
+
+import com.baidu.paddle.lite.demo.common.Utils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
  * @author shaotienlee
  */
+
+
 public class IdCardUtil {
+
+    public static HashSet<String> nationSet;
+
+    static {
+        nationSet = new HashSet<>();
+        nationSet.addAll(Arrays.asList(Constants.NATION_ARRAY));
+    }
 
     public static boolean isResultMapSatisfied(Map<String, String> resultMap) {
         String unknownVal = Constants.UNKNOWN;
@@ -102,7 +120,7 @@ public class IdCardUtil {
             // handle nation
             boolean isNationNotEdited = Objects.equals(resultMap.get(Constants.NATION), Constants.UNKNOWN);
             boolean isNationWithLabel = i > 1 && (str.contains("民族") || str.contains("族"));
-            boolean isNationWithoutLabel = i > 1 && str.length() == 1 && isTextChinese(str);
+            boolean isNationWithoutLabel = i > 1 && str.length() <=4 && isTextChinese(str);
             if (isNationNotEdited && isNationWithLabel) {
                 String nationString = str.replace("民族", "");
                 if (nationString.length() == 0) {
@@ -120,8 +138,10 @@ public class IdCardUtil {
                     continue;
                 }
             } else if (isNationNotEdited && isNationWithoutLabel) {
-                resultMap.put(Constants.NATION, str);
-                continue;
+                if (nationSet.contains(str)) {
+                    resultMap.put(Constants.NATION, str);
+                    continue;
+                }
             }
 
             // handle birth (No need to do so, parse ID number instead)
