@@ -8,7 +8,10 @@ Android用离线身份证OCR识别. 包含了CV图像预处理, 以及OCR文字�
 **注意:**
 在第一次运行会要权限, 取得权限后可能会闪退, 属正常现象. 以后打开就可以正常使用.
 
-## 部署
+安装包地址:
+[Release页面](https://github.com/Blackmesa-Canteen/android_ocr_demo/releases/tag/v0.2.0-alpha)
+
+## 源码部署
 应该能够正常运行, 如果出了问题, 应该是缺失了paddleLite预测依赖库和openCV依赖库, 请参考以下开源项目的安装说明配置好依赖库:
 [Paddle-Lite-Demo](https://github.com/PaddlePaddle/Paddle-Lite-Demo)
  
