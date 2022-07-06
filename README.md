@@ -2,6 +2,7 @@
 
 ## 简介
 Android用离线身份证OCR识别. 包含了CV图像预处理, 以及OCR文字识别.
+
 界面包含一个身份证拍摄框, 支持打开闪光灯. 会实时识别, 如果所需内容已完全识别, 就会跳转新的activity包含身份证信息.
 
 ## 部署
@@ -61,6 +62,8 @@ Android用离线身份证OCR识别. 包含了CV图像预处理, 以及OCR文字�
  * common Java 包
    在 `app/src/java/com/baidu/paddle/lite/demo/common` 目录下，实现摄像头和框架的公共处理，一般不用修改。其中，Utils.java 用于存放一些公用的且与 Java 基类无关的功能，例如模型拷贝、字符串类型转换等
  
+ * util Java 包
+   在`app/src/main/java/com/baidu/paddle/lite/demo/util`, 里面封装了对身份证信息处理的逻辑.
  * ppocr_demo Java 包
    在 `app/src/java/com/baidu/paddle/lite/demo/ppocr_demo` 目录下，实现 APP 界面消息事件和 Java/C++ 端代码互传的桥梁功能
    * MainActivity
