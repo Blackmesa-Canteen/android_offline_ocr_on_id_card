@@ -1,5 +1,5 @@
-# OOCR 文字识别 Demo 使用指南
- 在 Android APP 上，实现实时的 OCR 文字识别功能。此 Demo 有很好的的易用性和开放性，如在 Demo 中跑自己训练好的模型等。
+# OCR Android 身份证识别 Demo 使用指南
+ 在 Android APP 上，实现实时的 身份证OCR 文字识别功能。此 Demo 有很好的的易用性和开放性，如在 Demo 中跑自己训练好的模型等。
  本文主要介绍 OCR 文字识别 Demo 的运行方法和如何在更新模型/输入/输出处理下，保证 Demo 仍可继续运行。
 
 * Paddle Lite 项目：https://github.com/PaddlePaddle/Paddle-Lite
