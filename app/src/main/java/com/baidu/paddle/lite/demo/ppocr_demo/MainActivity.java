@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Came
     protected String nationPath = "nation.txt";
 
     protected String configPath = "config.txt";
-    protected int cpuThreadNum = 2;
+    protected int cpuThreadNum = 4;
     protected String cpuPowerMode = "LITE_POWER_HIGH";
 
     // result text array of OCR
