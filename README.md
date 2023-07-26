@@ -1,6 +1,7 @@
-# OCR Android 身份证识别 Demo 使用指南
+# OCR Android 离线中国身份证识别 Demo 使用指南
+# Offline OCR Android Chinese ID card identification Demo Usage guide
 
-## 简介
+## 简介 Intro
 Android用离线身份证OCR识别. 包含了CV图像预处理, 以及OCR文字识别.
 
 界面包含一个身份证拍摄框, 支持打开闪光灯. 会实时识别, 如果所需内容已完全识别, 就会跳转新的activity包含身份证信息.
@@ -10,13 +11,23 @@ Android用离线身份证OCR识别. 包含了CV图像预处理, 以及OCR文字�
 安装包地址:
 [Release页面](https://github.com/Blackmesa-Canteen/android_ocr_demo/releases/tag/v0.2.0-alpha)
 
-## 源码部署
+Android Chinese ID card identification with offline OCR. It includes CV image preprocessing and OCR text recognition.
+
+The screen contains an ID card photo box and supports the flash. It will be recognized in real time, and if the required content is fully recognized, it will jump to a new activity containing ID information.
+
+**Note: It is normal that the app asks for permission on the first run. After obtaining permission, it may blink back. You can open it later and use it normally.**
+Installation package address:[Release page](https://github.com/Blackmesa-Canteen/android_ocr_demo/releases/tag/v0.2.0-alpha)
+
+## 源码部署 Run the src
 应该能够正常运行, 如果出了问题, 应该是缺失了paddleLite预测依赖库和openCV依赖库, 请参考以下开源项目的安装说明配置好依赖库:
 [Paddle-Lite-Demo](https://github.com/PaddlePaddle/Paddle-Lite-Demo)
+
+It should work. if not, it could be missing paddleLite predictive dependency library and openCV dependency library, please refer to the following open source project installation instructions to configure the dependency library: [Paddle-Lite-Demo](https://github.com/PaddlePaddle/Paddle-Lite-Demo)
  
- ## 升级预测模型
+ ## 升级预测模型 Upgrade models
  **注意：**
  如果预测模型有版本升级，建议同步更新 OPT 优化后的模型。例如，预测库升级至 2.10—rc 版本，需要做以下操作：
+If the version of the prediction model has been upgraded, it is recommended to update the OPT optimized model simultaneously. For example, to upgrade the predictive library to version 2.10-RC, you need to do the following:
 
  ```shell
  # 下载 PaddleOCR V2.0 版本的中英文 inference 模型
