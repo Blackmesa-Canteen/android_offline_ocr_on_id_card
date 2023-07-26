@@ -19,7 +19,7 @@ The screen contains an ID card photo box and supports the flash. It will be reco
 Installation package address:[Release page](https://github.com/Blackmesa-Canteen/android_ocr_demo/releases/tag/v0.2.0-alpha)
 
 ## 源码部署 Run the src
-应该能够正常运行, 如果出了问题, 应该是缺失了paddleLite预测依赖库和openCV依赖库, 请参考以下开源项目的安装说明配置好依赖库:
+是可以正常运行的, 如果您这边出了问题, 大概率是缺失了paddleLite预测依赖库和openCV依赖库, 请参考以下开源项目的安装说明配置好依赖库:
 [Paddle-Lite-Demo](https://github.com/PaddlePaddle/Paddle-Lite-Demo)
 
 It should work. if not, it could be missing paddleLite predictive dependency library and openCV dependency library, please refer to the following open source project installation instructions to configure the dependency library: [Paddle-Lite-Demo](https://github.com/PaddlePaddle/Paddle-Lite-Demo)
